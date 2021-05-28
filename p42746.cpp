@@ -7,15 +7,9 @@ bool cmp(int n1, int n2){
     return t1 > t2 ? true : false;
 }
 
-string solution(vector<int> numbers) {
-    string answer = "";
+string solution(vector<int> numbers){
     sort(numbers.begin(), numbers.end(), cmp);
-
-    for(int n : numbers){
-        answer += to_string(n);
-    }
-
-    if(answer[0] == '0') answer = "0";
-    
-    return answer;
+    string answer = "";
+    for(int n : numbers) answer += to_string(n);
+    return answer[0] == '0' ? "0" : answer;
 }
