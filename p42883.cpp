@@ -1,34 +1,21 @@
 #include<bits/stdc++.h>
 using namespace std;
-string solution(string number, int k) {
-    
-    int len = number.length();
-    
-    int max_num = 0;
-    int i;
-    int cnt = 0;
-    for(i = 0; i < len - k; i++){
-        max_num = max(max_num, number[i] - '0');
-    }
 
-    for(i = 0; number[i] - '0' < max_num; i++){
-        number.erase(i--, 1);
-        cnt++;
-    }
+string solution(string number, int k){
+    string answer = number.substr(k);
 
-    while(cnt < k){
-        if(number[i] - '0' < number[i + 1] - '0'){
-            number.erase(i, 1);
-            cnt++;
+    for(int i = k - 1; i > -1; i--){
+        for(int j = 0; j < answer.length(); j++){
+            if(number[i] < answer[j]){
+                break;
+            }
+            else{
+                char tmp = number[i];
+                number[i] = answer[j];
+                answer[j] = tmp;
+            }
         }
-        i++;
     }
-    
-    return number;
-}
 
-int main(){
-    cout << solution("1924", 2) << "\n";
-    cout << solution("1231234", 3) << "\n";
-    cout << solution("4177252841", 4) << "\n";
+    return answer;
 }
