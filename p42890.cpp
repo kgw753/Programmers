@@ -1,16 +1,27 @@
 #include<bits/stdc++.h>
 using namespace std;
-int N, M, visited[10];
+int row, col;
 vector<vector<string>> r;
 vector<vector<int>> key;
-bool minCheck(vector<int> candi){
-    if(key.empty()) return true;
-    for(vector<int> v : key){
+bool onlyCheck(vector<int> v){
+    map<string, int> mp;
+    for(int i = 0; i < row; i++){
+        string info = "";
+        for(int j = 0; j < v.size(); j++){
+            info += r[i][v[j]];
+        }
+        mp[info]++;
+        if(mp[info] > 1) return false;
+    }
+    return true;
+}
+bool minCheck(vector<int> v){
+    for(vector<int> k : key){
         bool isMin = false;
-        for(int i = 0; i < v.size(); i++){
+        for(int i = 0; i < k.size(); i++){
             bool alreadyIn = false;
-            for(int j = 0; j < candi.size(); j++){
-                if(v[i] == candi[j]) alreadyIn = true;
+            for(int j = 0; j < v.size(); j++){
+                if(v[j] == k[i]) alreadyIn = true;
             }
             if(!alreadyIn) isMin = true;
         }
@@ -18,32 +29,23 @@ bool minCheck(vector<int> candi){
     }
     return true;
 }
-void combi(int idx, vector<int> candi, int size){
-    if(candi.size() == size){
-        if(!minCheck(candi)) return;
-        map<string, int> mp;
-        for(int i = 0; i < N; i++){
-            string str = "";
-            for(int idx : candi){
-                str += r[i][idx];
-            }
-            mp[str]++;
-            if(mp[str] > 1) return;
-        }
-        key.push_back(candi);
+void combi(int idx, vector<int> v, int size){
+    if(v.size() == size){
+        if(minCheck(v) && onlyCheck(v)) key.push_back(v);
+        return;
     }
-    for(int i = idx + 1; i < M; i++){
-        candi.push_back(i);
-        combi(i, candi, size);
-        candi.pop_back();
+    for(int i = idx + 1; i < col; i++){
+        v.push_back(i);
+        combi(i, v, size);
+        v.pop_back();
     }
 }
 int solution(vector<vector<string>> relation) {
     r = relation;
-    N = relation.size();
-    M = relation[0].size();
-    for(int i = 0; i < M; i++){
-        combi(-1, vector<int>(), i + 1);
+    row = relation.size();
+    col = relation[0].size();
+    for(int i = 1; i <= col; i++){
+        combi(-1, vector<int>(), i);
     }
     return key.size();
 }
