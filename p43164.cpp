@@ -1,30 +1,27 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define MAX 10004
-vector<vector<string>> info;
 bool found = false;
-void dfs(string here, vector<string> &answer, vector<bool> usedTicket, int rem){
+void dfs(string here, vector<bool> visited, vector<string> &answer, vector<vector<string>> tickets, int rem){
     answer.push_back(here);
-    if(rem == 0) {
+    if(rem == 0){
         found = true;
         return;
     }
-    for(int i = 0; i < info.size(); i++){
-        if(info[i][0] == here && usedTicket[i] == false){
-            usedTicket[i] = true;
-            dfs(info[i][1], answer, usedTicket, rem - 1);
-            usedTicket[i] = false;
+    for(int i = 0; i < tickets.size(); i++){
+        if(tickets[i][0] == here && visited[i] == false){
+            visited[i] = true;
+            dfs(tickets[i][1], visited, answer, tickets, rem - 1);
             if(found) return;
+            visited[i] = false;
         }
     }
     answer.pop_back();
 }
 vector<string> solution(vector<vector<string>> tickets) {
     vector<string> answer;
-    vector<bool> usedTicket(tickets.size(), false);
+    vector<bool> visited(tickets.size(), false);
     sort(tickets.begin(), tickets.end());
-    info = tickets;
-    dfs("ICN", answer, usedTicket, tickets.size());
+    dfs("ICN", visited, answer, tickets, tickets.size());
     return answer;
 }
 int main(){
