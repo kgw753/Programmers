@@ -9,17 +9,6 @@ int getParent(int node){
     if(parent[node] == node) return node;
     return parent[node] = getParent(parent[node]);
 }
-bool findParent(int a, int b){
-    int x = getParent(a);
-    int y = getParent(b);
-    return x != y;
-}
-void unionParent(int a, int b){
-    int x = getParent(a);
-    int y = getParent(b);
-    if(x < y) parent[b] = a;
-    else parent[a] = b;
-}
 int solution(int n, vector<vector<int>> costs) {
     int ret = 0;
     for(int i = 0; i < MAX; i++) parent[i] = i;

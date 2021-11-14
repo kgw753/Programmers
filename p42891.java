@@ -3,7 +3,7 @@ import java.util.*;
 class Food implements Comparable<Food> {
 
     private int time;
-    private int index;
+    private int index;g
 
     public Food(int time, int index) {
         this.time = time;

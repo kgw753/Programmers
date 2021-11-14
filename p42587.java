@@ -10,10 +10,9 @@ public class p42587 {
             q.add(priorities[i]);
             importance[priorities[i] - 1]++;
         }
-        
         for(int i = 8; i > -1 && location > -1; i--){
             while(importance[i] > 0 && location-- > -1){
-                if(q.peek() == (i + 1)){
+                if(q.peek() == i + 1){
                     importance[i]--;
                     q.poll();
                     answer++;

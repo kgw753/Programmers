@@ -7,17 +7,9 @@ public class p64061 {
         int answer = 0;
         for(int i = 0; i < moves.length; i++){
             int now = moves[i] - 1;
-
-            System.out.println("*****"+now + " " + board.length);
-            
             int j;
-            for(j = 0; j < board.length && board[j][now] == 0 ; j++){
-                
-            }
-            System.out.println("j = " + j);
+            for(j = 0; j < board.length && board[j][now] == 0 ; j++);
             if(j == board.length) continue;
-            
-
             if(!basket.isEmpty() && basket.getLast() == board[j][now]){
                 basket.removeLast();
                 answer += 2;

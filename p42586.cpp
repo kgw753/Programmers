@@ -9,7 +9,7 @@ vector<int> solution(vector<int> progresses, vector<int> speeds) {
         int cnt = 0;
         while (day * speeds[i] + progresses[i] < 100)
             day++;
-        while (day * speeds[i] + progresses[i] >= 100){
+        while (i < progresses.size() && day * speeds[i] + progresses[i] >= 100){
             cnt++;
             i++;
         }
