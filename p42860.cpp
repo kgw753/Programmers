@@ -1,43 +1,36 @@
 #include<bits/stdc++.h>
 using namespace std;
-int getIdx(int n, int len){
-    if(n >= len){
-        return n - len;
-    }
-    else if(n < 0){
-        return n + len;
-    }
-    return n;
+int getIdx(int nIdx, int len){
+    if(nIdx < 0) return len + nIdx;
+    else if(nIdx >= len) return nIdx - len;
+    else return nIdx;
 }
 int solution(string name) {
-    int answer = 0, here = 0;
-    string tmp(name.length(), 'A');
-    while(true){
-        if(name[here] - 'A' < ('Z' + 1) - name[here]){
-            answer += name[here] - 'A';
-        }
-        else{
-            answer += ('Z' + 1) - name[here];
-        }
-        tmp[here] = name[here];
-        if(tmp == name) break;
-
-        for(int move = 1; move < name.length(); move++){
-            int idx1 = getIdx(here + move, name.length());
-            int idx2 = getIdx(here - move, name.length());
-            if(name[idx1] != tmp[idx1]){
-                here = idx1;
-                answer += move;
+    int ret = 0;
+    for(char c : name){
+        if(c - 'A' < ('Z' + 1) - c) ret += c - 'A';
+        else ret += ('Z' + 1) - c;
+    }
+    string cmp = string(name.size(), 'A');
+    int idx = 0, dist;
+    while(cmp != name){
+        cmp[idx] = name[idx];
+        for(int mov = 1; mov <= name.length(); mov++){
+            int idx1 = getIdx(idx + mov, name.length());
+            int idx2 = getIdx(idx - mov, name.length());
+            if(name[idx1] != cmp[idx1]){
+                ret += mov;
+                idx = idx1;
                 break;
             }
-            else if(name[idx2] != tmp[idx2]){
-                here = idx2;
-                answer += move;
+            else if(name[idx2] != cmp[idx2]){
+                ret += mov;
+                idx = idx2;
                 break;
             }
         }
     }
-    return answer;
+    return ret;
 }
 int main(){
     string input;
