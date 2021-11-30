@@ -1,72 +1,60 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define MAX 34
 int N, M;
-queue<pair<int, int>> delPos;
+int dx[] = {0, 1, 0, 1};
+int dy[] = {0, 0, 1, 1};
+queue<pair<int, int>> del;
 vector<string> MAP;
-int dy[] = {0, 1, 1};
-int dx[] = {1, 1, 0};
 void arrange(){
     for(int i = N - 1; i >= 0; i--){
         for(int j = 0; j < M; j++){
             if(MAP[i][j] == '.') continue;
-            int npos = i + 1;
-            while(npos < N && MAP[npos][j] == '.') npos++;
-            npos--;
-            if(npos != i){
-                MAP[npos][j] = MAP[i][j];
+            int y = i + 1;
+            while(y < N && MAP[y][j] == '.') y++;
+            y--;
+            if(y != i){
+                MAP[y][j] = MAP[i][j];
                 MAP[i][j] = '.';
             }
         }
     }
 }
 void deleteFour(int y, int x, int &cnt){
-    if(MAP[y][x] != '.'){
-        cnt++;
-        MAP[y][x] = '.';
-    }
-    for(int i = 0; i < 3; i++){
-        int ny = y + dy[i];
+    for(int i = 0; i < 4; i++){
         int nx = x + dx[i];
-        if(MAP[ny][nx] != '.'){
-            cnt++;
+        int ny = y + dy[i];
+        if(MAP[ny][nx] != '.') {
             MAP[ny][nx] = '.';
+            cnt++;
         }
     }
 }
-bool isFour(char c, int y, int x){
-    for(int i = 0; i < 3; i++){
-        int ny = y + dy[i];
+bool isSame(int y, int x){
+    for(int i = 0; i < 4; i++){
         int nx = x + dx[i];
-        if(ny < 0 || nx < 0 || ny >= N || nx >= M || MAP[y][x] != MAP[ny][nx]) return false;
+        int ny = y + dy[i];
+        if(MAP[y][x] != MAP[ny][nx]) return false;
     }
     return true;
 }
-int solution(int n, int m, vector<string> board) {
-    N = n, M = m;
+int solution(int m, int n, vector<string> board) {
+    N = m, M = n;
     MAP = board;
-    int answer = 0;
-    bool bomb = true;
-    while(bomb){
-        bomb = false;
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < M; j++){
-                if(MAP[i][j] == '.') continue;
-                if(isFour(MAP[i][j], i, j)){
-                    delPos.push({i, j});
-                    bomb = true;
+    int ret = 0;
+    while(true){
+        for(int i = 0; i < N - 1; i++){
+            for(int j = 0; j < M - 1; j++){
+                if(MAP[i][j] != '.' && isSame(i, j)){
+                    del.push({i, j});
                 }
             }
         }
-        if(bomb){
-            while(delPos.size()){
-                int y = delPos.front().first;
-                int x = delPos.front().second;
-                delPos.pop();
-                deleteFour(y, x, answer);
-            }
-            arrange();
+        if(del.empty()) break;
+        while(del.size()){
+            deleteFour(del.front().first, del.front().second, ret);
+            del.pop();
         }
+        arrange();
     }
-    return answer;
+    return ret;
 }
